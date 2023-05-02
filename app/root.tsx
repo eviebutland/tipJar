@@ -25,9 +25,12 @@ export default function App() {
       </head>
 
       <body>
+        {/* Outlet is used on parent components to position the child  */}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
+
+        {/* Live reload is a component used in development */}
         <LiveReload />
       </body>
     </html>

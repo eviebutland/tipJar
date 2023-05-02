@@ -19,3 +19,4 @@ startTransition(() => {
 
 // Hydrate root is a react feature that allows you to attach react to existing HTML that was rendered by the server.
 // Hydrate expects the content to be the exact same as the server-rendered content. Any mismatches are bugs.
+// This is the first javascript that will run in the browser

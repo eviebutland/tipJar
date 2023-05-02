@@ -70,4 +70,12 @@ netlify deploy --build --prod
 
 I decided to pick [remix](https://remix.run/) as my framework after hearing it on the [syntax](https://syntax.fm/) podcast. I am confident with using React and have used Next.js in a previous project, Remix also seemed to boast about a lightining fast UI that excited me.
 
+### Tailwind
+
+Remix discourages against runtime libraries like styled-components but suggests tailwind to be okay. They recommend the use of more traditional CSS to make better use of browser caching and unloading.
+
+### Prisma
+
+Remix mentions the use of Prisma in its tutorials, and vise versa. Prisma is a type-safe ORM which makes working with databases easier. You can define models in the prisma language and make use of the auto-completion it provides.
+
 </details>
