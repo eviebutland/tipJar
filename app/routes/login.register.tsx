@@ -1,28 +1,25 @@
 const Register = () => {
   return (
-    <div>
-      <form method="post">
-        <div>
-          <label>
-            Name: <input type="text" name="name" />
-          </label>
-        </div>
+    <div className="centered-container">
+      <h1>Login</h1>
+      <form method="post" className="w-1/2">
+        <label>
+          Name: <input type="text" name="name" />
+        </label>
+
         <div>
           <label>
             Email: <input type="text" name="email" />
           </label>
         </div>
 
-        <div>
-          <label>
-            Content: <textarea name="content" />
-          </label>
-        </div>
-        <div>
-          <button type="submit" className="button">
-            Register
-          </button>
-        </div>
+        <label>
+          Content: <textarea name="content" />
+        </label>
+
+        <button type="submit" className="priority">
+          Register
+        </button>
       </form>
     </div>
   );

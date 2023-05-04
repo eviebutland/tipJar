@@ -34,58 +34,66 @@ const Account = () => {
   };
 
   return (
-    <div>
+    <div className="centered-container">
       <form onSubmit={handleSubmit}>
-        <h1 className="text-lg">Account details</h1>
-        <label>
-          Name: <input value={data?.name} onChange={handleUpdateUser}></input>
-        </label>
+        <h1 className="mt-2">Account details</h1>
 
-        <label>
-          Email: <input value={data?.email} onChange={handleUpdateUser}></input>
-        </label>
+        <div>
+          <label>
+            Name:
+            <input
+              value={data?.name}
+              onChange={handleUpdateUser}
+              className="border"
+            ></input>
+          </label>
 
-        <label>
-          Password:
-          <input value={data?.password} onChange={handleUpdateUser}></input>
-        </label>
+          <label>
+            Email:{" "}
+            <input value={data?.email} onChange={handleUpdateUser}></input>
+          </label>
 
-        <label>
-          Bio:
-          <input value={data?.bio} onChange={handleUpdateUser}></input>
-        </label>
+          <label>
+            Password:
+            <input value={data?.password} onChange={handleUpdateUser}></input>
+          </label>
 
-        <label>
-          Role:
-          <input value={data?.role} onChange={handleUpdateUser}></input>
-        </label>
+          <label>
+            Bio:
+            <textarea value={data?.bio} onChange={handleUpdateUser}></textarea>
+          </label>
 
-        <label>
-          Profile picture:
-          <input
-            value={data?.profilePicture}
-            onChange={handleUpdateUser}
-          ></input>
-        </label>
-        <hr />
+          <label>
+            Role:
+            <input value={data?.role} onChange={handleUpdateUser}></input>
+          </label>
 
-        <p>Payment information</p>
-        <label>
-          Card Number:
-          <input
-            value={data?.payment.cardNo}
-            onChange={handleUpdateUser}
-          ></input>
-        </label>
+          <label>
+            Profile picture:
+            <input
+              value={data?.profilePicture}
+              onChange={handleUpdateUser}
+            ></input>
+          </label>
+        </div>
+        <h2>Payment information</h2>
+        <div className="flex space-x-4">
+          <label>
+            Card Number:
+            <input
+              value={data?.payment.cardNo}
+              onChange={handleUpdateUser}
+            ></input>
+          </label>
 
-        <label>
-          Sort code:
-          <input
-            value={data?.payment.sortCode}
-            onChange={handleUpdateUser}
-          ></input>
-        </label>
-
+          <label>
+            Sort code:
+            <input
+              value={data?.payment.sortCode}
+              onChange={handleUpdateUser}
+            ></input>
+          </label>
+        </div>
         <button type="submit">Save changes</button>
       </form>
     </div>
