@@ -78,6 +78,8 @@ Remix discourages against runtime libraries like styled-components but suggests 
 
 Remix mentions the use of Prisma in its tutorials, and vise versa. Prisma is a type-safe ORM which makes working with databases easier. You can define models in the prisma language and make use of the auto-completion it provides.
 
+It is very intutive and easy to pick up. I have found it incredibly simple to understand so far.
+
 #### More on Remix
 
 Remix has some special conventions built in. One is that any file with .server in the file name will not be run in the browser and the compiler can ignore it.
@@ -85,3 +87,5 @@ Remix has some special conventions built in. One is that any file with .server i
 In order to access data from an endpoint, we use `useLoaderData()` from `@remix-run/react`. We have to create a loader async function that calls the endpoint, and then made accessible via `useLoaderData()`. An example is provided in the [docs](https://remix.run/docs/en/main/tutorials/jokes#read-from-the-database-in-a-remix-loader).
 
 </details>
+
+Links: [SST](https://docs.sst.dev/) -> Framework for AWS.
