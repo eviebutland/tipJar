@@ -1,38 +1,45 @@
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { ActionArgs } from "@remix-run/node";
 import { db } from "~/utils/db.server";
+import { Form } from "@remix-run/react";
+
+// By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
+export const action = async ({ request }: ActionArgs) => {
+  const form = await request.formData();
+
+  const formData = {
+    name: form.get("name"),
+    email: form.get("email"),
+    password: form.get("password"),
+    bio: form.get("bio"),
+    role: form.get("role"),
+    profilePicture: form.get("profilePicture"),
+    payment: {
+      cardNo: form.get("cardNo"),
+      sortCode: form.get("sortCode"),
+    },
+  };
+  console.log("form data here", formData);
+
+  const newUser = await db.user.create({
+    data: {
+      ...formData,
+    },
+  });
+
+  console.log(newUser);
+  return "yes";
+};
 
 const Register = () => {
-  async function handleSubmit() {
-    try {
-      const newUser = await db.user.create({
-        data: {
-          name: "Evie 2",
-          email: "test@tes.com",
-          password: "Encrypted hased password",
-          bio: "This is a test user",
-          role: "Developer",
-          profilePicture: "",
-          payment: {
-            cardNo: 123,
-            sortCode: 123456,
-          },
-        },
-      });
-
-      return newUser;
-    } catch (error) {
-      console.log("Error creating new user", error);
-    }
-  }
-
   function handleViewPassword() {
     console.log("change input type password to text");
   }
   return (
     <div className="centered-container">
       <h1>Register</h1>
-      <form method="post" className="w-1/2" onSubmit={handleSubmit}>
+      <Form method="post" action="/register" className="w-1/2">
         <label>
           Name: <input type="text" name="name" />
         </label>
@@ -44,7 +51,12 @@ const Register = () => {
         <label>
           Password:
           <div className="flex items-center">
-            <input type="password" name="password" className="flex-1 mr-2" />
+            <input
+              type="password"
+              name="password"
+              className="flex-1 mr-2"
+              autoComplete="yes"
+            />
 
             <FontAwesomeIcon
               icon={faEye}
@@ -80,7 +92,7 @@ const Register = () => {
         <button type="submit" className="priority">
           Register
         </button>
-      </form>
+      </Form>
     </div>
   );
 };
