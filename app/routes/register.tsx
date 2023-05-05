@@ -6,30 +6,33 @@ import { Form } from "@remix-run/react";
 
 // By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
 export const action = async ({ request }: ActionArgs) => {
-  const form = await request.formData();
+  try {
+    const form = await request.formData();
 
-  const formData = {
-    name: form.get("name"),
-    email: form.get("email"),
-    password: form.get("password"),
-    bio: form.get("bio"),
-    role: form.get("role"),
-    profilePicture: form.get("profilePicture"),
-    payment: {
-      cardNo: form.get("cardNo"),
-      sortCode: form.get("sortCode"),
-    },
-  };
-  console.log("form data here", formData);
+    const formData = {
+      name: form.get("name"),
+      email: form.get("email"),
+      password: form.get("password"),
+      bio: form.get("bio"),
+      role: form.get("role"),
+      profilePicture: form.get("profilePicture"),
+      payment: {
+        cardNo: form.get("cardNo"),
+        sortCode: form.get("sortCode"),
+      },
+    };
+    console.log("form data here", formData);
 
-  const newUser = await db.user.create({
-    data: {
-      ...formData,
-    },
-  });
-
-  console.log(newUser);
-  return "yes";
+    const newUser = await db.user.create({
+      data: {
+        ...formData,
+      },
+    });
+    console.log(newUser);
+    return newUser;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const Register = () => {
