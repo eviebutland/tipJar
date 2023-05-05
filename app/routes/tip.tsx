@@ -12,7 +12,6 @@ const Tip = () => {
   }
   return (
     <div>
-      {/*  this will make up the actual tip section */}
       <Outlet />
       <div>
         <div className="flex space-x-4 items-center">

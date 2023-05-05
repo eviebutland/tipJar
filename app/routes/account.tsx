@@ -1,4 +1,5 @@
 import { useLoaderData } from "@remix-run/react";
+import { Menu } from "~/components/Menu";
 import { db } from "~/utils/db.server";
 
 export const loader = async () => {
@@ -35,6 +36,7 @@ const Account = () => {
 
   return (
     <div className="centered-container">
+      <Menu></Menu>
       <form onSubmit={handleSubmit}>
         <h1 className="mt-2">Account details</h1>
 

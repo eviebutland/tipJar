@@ -19,9 +19,9 @@ label {
 }
 button {
     @apply border p-2 text-sm min-w-[100px];
-    
+
     &.priority {
-        @apply bg-blue-800;
+        @apply bg-blue-800 text-white;
     }
         
 }
