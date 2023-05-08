@@ -1,6 +1,7 @@
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ActionArgs } from "@remix-run/node";
+
 import { db } from "~/utils/db.server";
 import { Form } from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
@@ -11,7 +12,6 @@ export const action = async ({ request }: ActionArgs) => {
   try {
     const form = await request.formData();
 
-    console.log(form);
     const formData: Prisma.UserCreateInput = {
       name: form.get("name") as string,
       email: form.get("email") as string,
@@ -24,6 +24,7 @@ export const action = async ({ request }: ActionArgs) => {
         sortCode: parseInt(form.get("sortCode") as string),
       },
     };
+
     console.log("form data here", formData);
 
     const newUser = await db.user.create({
@@ -33,11 +34,6 @@ export const action = async ({ request }: ActionArgs) => {
     });
 
     console.log(newUser);
-    badRequest({
-      fieldErrors: [],
-      fields: formData,
-      formError: null,
-    });
 
     return newUser;
   } catch (error) {
@@ -47,8 +43,6 @@ export const action = async ({ request }: ActionArgs) => {
       fields: null,
       formError: "Form not submitted correctly.",
     });
-  } finally {
-    return null;
   }
 };
 
