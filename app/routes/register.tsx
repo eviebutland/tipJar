@@ -5,22 +5,23 @@ import { db } from "~/utils/db.server";
 import { Form } from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
 import { badRequest } from "~/utils/request.server";
+import type { Prisma } from "@prisma/client";
 // By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
 export const action = async ({ request }: ActionArgs) => {
   try {
     const form = await request.formData();
 
     console.log(form);
-    const formData = {
-      name: form.get("name"),
-      email: form.get("email"),
-      password: form.get("password"),
-      bio: form.get("bio"),
-      role: form.get("role"),
-      profilePicture: form.get("profilePicture"),
+    const formData: Prisma.UserCreateInput = {
+      name: form.get("name") as string,
+      email: form.get("email") as string,
+      password: form.get("password") as string,
+      bio: form.get("bio") as string,
+      role: form.get("role") as string,
+      profilePicture: form.get("profilePicture") as string,
       payment: {
-        cardNo: form.get("cardNo"),
-        sortCode: form.get("sortCode"),
+        cardNo: parseInt(form.get("cardNo") as string),
+        sortCode: parseInt(form.get("sortCode") as string),
       },
     };
     console.log("form data here", formData);
@@ -40,12 +41,14 @@ export const action = async ({ request }: ActionArgs) => {
 
     return newUser;
   } catch (error) {
-    badRequest({
+    console.log("THE ERROR IS:", error);
+    return badRequest({
       fieldErrors: null,
       fields: null,
       formError: "Form not submitted correctly.",
     });
-    console.log(error);
+  } finally {
+    return null;
   }
 };
 
