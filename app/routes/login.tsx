@@ -8,7 +8,7 @@ const Login = () => {
   }
   function handleRedirectToRegister() {
     console.log("redirect to regitser");
-    redirect("/register", 303);
+    redirect("/register");
   }
   return (
     <div>
@@ -24,7 +24,7 @@ const Login = () => {
       </form>
 
       <p>Don't have an account?</p>
-      <button onClick={handleRedirectToRegister}>Register</button>
+      <a href="/register">Register</a>
       {/* <Outlet /> */}
     </div>
   );

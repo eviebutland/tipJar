@@ -1,48 +1,45 @@
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ActionArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 
 import { db } from "~/utils/db.server";
 import { Form } from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
 import { badRequest } from "~/utils/request.server";
 import type { Prisma } from "@prisma/client";
+import { validateUserForm } from "~/utils/formValidation";
 // By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
 export const action = async ({ request }: ActionArgs) => {
-  try {
-    const form = await request.formData();
+  const form = await request.formData();
 
-    const formData: Prisma.UserCreateInput = {
-      name: form.get("name") as string,
-      email: form.get("email") as string,
-      password: form.get("password") as string,
-      bio: form.get("bio") as string,
-      role: form.get("role") as string,
-      profilePicture: form.get("profilePicture") as string,
-      payment: {
-        cardNo: parseInt(form.get("cardNo") as string),
-        sortCode: parseInt(form.get("sortCode") as string),
-      },
-    };
+  const formData: Prisma.UserCreateInput = {
+    name: form.get("name") as string,
+    email: form.get("email") as string,
+    password: form.get("password") as string,
+    bio: form.get("bio") as string,
+    role: form.get("role") as string,
+    profilePicture: form.get("profilePicture") as string,
+    cardNo: parseInt(form.get("cardNo") as string),
+    sortCode: parseInt(form.get("sortCode") as string),
+  };
 
-    console.log("form data here", formData);
+  const isValid = validateUserForm(formData);
 
+  if (isValid?.errors?.length) {
+    return badRequest({
+      fieldErrors: isValid.errors,
+      fields: isValid,
+      formError: isValid.message,
+    });
+  } else {
     const newUser = await db.user.create({
       data: {
         ...formData,
       },
     });
 
-    console.log(newUser);
-
-    return newUser;
-  } catch (error) {
-    console.log("THE ERROR IS:", error);
-    return badRequest({
-      fieldErrors: null,
-      fields: null,
-      formError: "Form not submitted correctly.",
-    });
+    return redirect(`/tip/${newUser.id}`);
   }
 };
 
@@ -52,6 +49,7 @@ const Register = () => {
   }
 
   const actionData = useActionData<typeof action>();
+  console.log("action data", actionData);
   return (
     <div className="centered-container">
       <h1>Register</h1>
@@ -63,7 +61,15 @@ const Register = () => {
 
         <label>
           Email:{" "}
-          <input type="text" defaultValue={actionData?.email} name="email" />
+          <input
+            type="text"
+            defaultValue={actionData?.email}
+            name="email"
+            aria-invalid={Boolean(actionData?.fields.path === "email")}
+            aria-errormessage={
+              actionData?.fields.path === "email" ? "email-error" : undefined
+            }
+          />
         </label>
 
         <label>
@@ -111,7 +117,7 @@ const Register = () => {
             <input
               type="number"
               name="cardNo"
-              defaultValue={actionData?.payment.cardNo}
+              defaultValue={actionData?.cardNo}
             />
           </label>
           <label>
@@ -119,15 +125,20 @@ const Register = () => {
             <input
               type="number"
               name="sortCode"
-              defaultValue={actionData?.payment.sortCode}
+              defaultValue={actionData?.sortCode}
             />
           </label>
         </section>
-        {actionData?.fieldErrors?.name ? (
-          <p className="form-validation-error" id="name-error" role="alert">
-            {actionData.fieldErrors.name}
+        {actionData?.formError ? (
+          <p
+            className="form-validation-error text-red-700"
+            id="name-error"
+            role="alert"
+          >
+            {actionData.formError}
           </p>
         ) : null}
+
         <button type="submit" className="priority">
           Register
         </button>

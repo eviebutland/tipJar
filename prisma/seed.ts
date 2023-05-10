@@ -20,10 +20,8 @@ function getUsers() {
       password: "password",
       role: "Developer",
       profilePicture: "",
-      payment: {
-        cardNo: 2342342,
-        sortCode: 23423,
-      },
+      cardNo: 2342342,
+      sortCode: 23423,
       createdAt: "2023-05-01T19:05:08.514Z",
       updatedAt: "2023-05-01T19:05:08.514Z",
     },
