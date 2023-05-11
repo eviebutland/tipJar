@@ -11,7 +11,7 @@ export const Menu = () => {
         <FontAwesomeIcon icon={faBars}></FontAwesomeIcon>
       </button>
       <a href="/login">Login</a>
-      <a href="/login/register">Register</a>
+      <a href="/register">Register</a>
       <a href="/account">Account</a>
       <a href="/tip/213123">Tip user</a>
     </div>

@@ -9,6 +9,7 @@ import { useActionData } from "@remix-run/react";
 import { badRequest } from "~/utils/request.server";
 import type { Prisma } from "@prisma/client";
 import { validateUserForm } from "~/utils/formValidation";
+import { ErrorBoundary } from "~/errorBoundary";
 // By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
@@ -49,7 +50,7 @@ const Register = () => {
   }
 
   const actionData = useActionData<typeof action>();
-  console.log("action data", actionData);
+
   return (
     <div className="centered-container">
       <h1>Register</h1>
@@ -129,15 +130,9 @@ const Register = () => {
             />
           </label>
         </section>
-        {actionData?.formError ? (
-          <p
-            className="form-validation-error text-red-700"
-            id="name-error"
-            role="alert"
-          >
-            {actionData.formError}
-          </p>
-        ) : null}
+        {actionData?.formError && (
+          <ErrorBoundary error={actionData}></ErrorBoundary>
+        )}
 
         <button type="submit" className="priority">
           Register

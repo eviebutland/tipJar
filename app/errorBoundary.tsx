@@ -1,10 +1,15 @@
-export function ErrorBoundary({ error }) {
+interface Props {
+  error: {
+    fieldErrors: string[];
+    fields: Record<string, unknown>;
+    formError: string;
+  };
+}
+export function ErrorBoundary({ error }: Props) {
   return (
     <div>
       <h1>Error</h1>
-      <p>{error.message}</p>
-      <p>The stack trace is:</p>
-      <pre>{error.stack}</pre>
+      <p>{error.fieldErrors}</p>
     </div>
   );
 }

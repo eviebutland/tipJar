@@ -82,10 +82,7 @@ const Account = () => {
         <div className="flex space-x-4">
           <label>
             Card Number:
-            <input
-              value={data?.payment.cardNo}
-              onChange={handleUpdateUser}
-            ></input>
+            <input value={data?.cardNo} onChange={handleUpdateUser}></input>
           </label>
 
           <label>
