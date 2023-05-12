@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 
-import { db } from "~/utils/db.server";
 import { Form } from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
 import { badRequest } from "~/utils/request.server";
 import type { Prisma } from "@prisma/client";
 import { validateUserForm } from "~/utils/formValidation";
 import { ErrorBoundary } from "~/errorBoundary";
+import { createUser } from "~/utils/register.server";
 // By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
@@ -34,11 +34,7 @@ export const action = async ({ request }: ActionArgs) => {
       formError: isValid.message,
     });
   } else {
-    const newUser = await db.user.create({
-      data: {
-        ...formData,
-      },
-    });
+    const newUser = createUser(formData);
 
     return redirect(`/tip/${newUser.id}`);
   }
@@ -57,19 +53,21 @@ const Register = () => {
       <Form method="post" action="/register" className="w-1/2">
         <label>
           Name:
-          <input defaultValue={actionData?.name} type="text" name="name" />
+          <input
+            defaultValue={actionData?.name}
+            type="text"
+            name="name"
+            aria-invalid={actionData?.fields.path === "name"}
+          />
         </label>
 
         <label>
-          Email:{" "}
+          Email:
           <input
             type="text"
             defaultValue={actionData?.email}
             name="email"
-            aria-invalid={Boolean(actionData?.fields.path === "email")}
-            aria-errormessage={
-              actionData?.fields.path === "email" ? "email-error" : undefined
-            }
+            aria-invalid={actionData?.fields.path === "email"}
           />
         </label>
 
@@ -82,6 +80,7 @@ const Register = () => {
               name="password"
               className="flex-1 mr-2"
               autoComplete="yes"
+              aria-invalid={actionData?.fields.path === "password"}
             />
 
             <FontAwesomeIcon
@@ -92,20 +91,31 @@ const Register = () => {
         </label>
 
         <label>
-          Bio: <textarea name="bio" defaultValue={actionData?.bio} />
+          Bio:
+          <textarea
+            name="bio"
+            defaultValue={actionData?.bio}
+            aria-invalid={actionData?.fields.path === "bio"}
+          />
         </label>
 
         <label>
-          Role:{" "}
-          <input type="text" name="role" defaultValue={actionData?.role} />
+          Role:
+          <input
+            type="text"
+            name="role"
+            defaultValue={actionData?.role}
+            aria-invalid={actionData?.fields.path === "role"}
+          />
         </label>
 
         <label>
-          Profile picture:{" "}
+          Profile picture:
           <input
             type="text"
             name="profilePicture"
             defaultValue={actionData?.profilePicture}
+            aria-invalid={actionData?.fields.path === "profilePicture"}
           />
         </label>
 
@@ -118,15 +128,17 @@ const Register = () => {
             <input
               type="number"
               name="cardNo"
+              aria-invalid={actionData?.fields.path === "cardNo"}
               defaultValue={actionData?.cardNo}
             />
           </label>
           <label>
-            Sort code:{" "}
+            Sort code:
             <input
               type="number"
               name="sortCode"
               defaultValue={actionData?.sortCode}
+              aria-invalid={actionData?.fields.path === "sortCode"}
             />
           </label>
         </section>

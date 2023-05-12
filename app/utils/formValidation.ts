@@ -1,6 +1,24 @@
 import type { User } from "@prisma/client";
 import { number, string, object } from "yup";
 
+export interface Login {
+  email: string;
+  password: string;
+}
+
+export function validateLogin(formData: Login) {
+  const loginSchema = object({
+    email: string().email().required(),
+    password: string().required(),
+  });
+
+  try {
+    return loginSchema.validateSync(formData);
+  } catch (error) {
+    return error;
+  }
+}
+
 export function validateUserForm(formData: User) {
   const userSchema = object({
     id: string(),

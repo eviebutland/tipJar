@@ -1,18 +1,48 @@
+import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-// import { Outlet } from "@remix-run/react";
+import { useActionData } from "@remix-run/react";
+import { ErrorBoundary } from "~/errorBoundary";
+import { validateLogin } from "~/utils/formValidation";
+import { login } from "~/utils/login.server";
+import { badRequest } from "~/utils/request.server";
+
+export const action = async ({ request }: ActionArgs) => {
+  const form = await request.formData();
+
+  const formData = {
+    email: form.get("email"),
+    password: form.get("password"),
+  };
+
+  const isValid = validateLogin(formData);
+
+  if (isValid?.errors?.length) {
+    return badRequest({
+      fieldErrors: isValid.errors,
+      fields: isValid,
+      formError: isValid.message,
+    });
+  } else {
+    try {
+      const user = login(formData);
+      return redirect(`/tip/${user.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
 
 const Login = () => {
+  const data = useActionData();
+  console.log(data);
   function handleSubmit() {
     console.log("redirect to account");
     redirect("/account");
   }
-  function handleRedirectToRegister() {
-    console.log("redirect to regitser");
-    redirect("/register");
-  }
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method="post">
         <label>
           Email: <input type="text" name="email" />
         </label>
@@ -23,9 +53,9 @@ const Login = () => {
         <button type="submit">Login</button>
       </form>
 
+      {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>}
       <p>Don't have an account?</p>
       <a href="/register">Register</a>
-      {/* <Outlet /> */}
     </div>
   );
 };

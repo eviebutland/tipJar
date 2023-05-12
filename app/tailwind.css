@@ -25,6 +25,13 @@ button {
     }
         
 }
+
+input{
+    @apply border-gray-200;
+    &[aria-invalid=true]{
+        @apply border-red-600;
+    }
+}
 .centered-container {
     @apply flex flex-col justify-center m-2  items-center;
 }

@@ -17,10 +17,6 @@ const Account = () => {
   const data = useLoaderData<typeof loader>();
   console.log(data);
 
-  const handleUpdateUser = (value) => {
-    console.log(value);
-  };
-
   const handleSubmit = async () => {
     try {
       return await db.user.update({
@@ -43,54 +39,43 @@ const Account = () => {
         <div>
           <label>
             Name:
-            <input
-              value={data?.name}
-              onChange={handleUpdateUser}
-              className="border"
-            ></input>
+            <input value={data?.name} className="border"></input>
           </label>
 
           <label>
-            Email:{" "}
-            <input value={data?.email} onChange={handleUpdateUser}></input>
+            Email: <input value={data?.email}></input>
           </label>
 
           <label>
             Password:
-            <input value={data?.password} onChange={handleUpdateUser}></input>
+            <input value={data?.password}></input>
           </label>
 
           <label>
             Bio:
-            <textarea value={data?.bio} onChange={handleUpdateUser}></textarea>
+            <textarea value={data?.bio}></textarea>
           </label>
 
           <label>
             Role:
-            <input value={data?.role} onChange={handleUpdateUser}></input>
+            <input value={data?.role}></input>
           </label>
 
           <label>
             Profile picture:
-            <input
-              value={data?.profilePicture}
-              onChange={handleUpdateUser}
-            ></input>
+            <input value={data?.profilePicture}></input>
           </label>
         </div>
         <h2>Payment information</h2>
         <div className="flex space-x-4">
           <label>
             Card Number:
-            <input value={data?.cardNo} onChange={handleUpdateUser}></input>
+            <input value={data?.cardNo}></input>
           </label>
 
           <label>
             Sort code:
-            <input
-              value={data?.payment.sortCode}
-              onChange={handleUpdateUser}
-            ></input>
+            <input value={data?.payment.sortCode}></input>
           </label>
         </div>
         <button type="submit">Save changes</button>
