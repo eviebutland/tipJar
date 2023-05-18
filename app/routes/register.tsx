@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 
-import { Form, isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import {
+  Form,
+  Scripts,
+  isRouteErrorResponse,
+  useRouteError,
+} from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
 
 import type { Prisma } from "@prisma/client";
@@ -159,6 +164,8 @@ const Register = () => {
           Register
         </button>
       </Form>
+      {/* Before this, the website did not use any javascript */}
+      <Scripts />
     </div>
   );
 };

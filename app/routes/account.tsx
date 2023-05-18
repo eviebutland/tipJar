@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { Scripts, useLoaderData, Form } from "@remix-run/react";
 import { Menu } from "~/components/Menu";
 import { db } from "~/utils/db.server";
 
@@ -33,7 +33,7 @@ const Account = () => {
   return (
     <div className="centered-container">
       <Menu></Menu>
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <h1 className="mt-2">Account details</h1>
 
         <div>
@@ -79,7 +79,9 @@ const Account = () => {
           </label>
         </div>
         <button type="submit">Save changes</button>
-      </form>
+      </Form>
+      {/* By having scripts in this page, it means the Form component can use Javascript Fetch, instead of requiring a full page reload */}
+      <Scripts />
     </div>
   );
 };

@@ -1,11 +1,13 @@
 import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
-import { Response } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import { Response, redirect } from "@remix-run/node";
+
 import {
   useActionData,
   isRouteErrorResponse,
   useRouteError,
-  Meta
+  Meta,
+  Scripts, Form,
+  Link
 } from "@remix-run/react";
 // import { ErrorBoundary } from "~/errorBoundary";
 import { validateLogin } from "~/utils/formValidation";
@@ -75,7 +77,9 @@ const Login = () => {
   return (
     <div>
       <Meta></Meta>
-      <form onSubmit={handleSubmit} method="post">
+      <Scripts />
+
+      <Form onSubmit={handleSubmit} method="post">
         <label>
           Email: <input type="text" name="email" />
         </label>
@@ -84,11 +88,12 @@ const Login = () => {
           Password: <input type="password" name="password" />
         </label>
         <button type="submit">Login</button>
-      </form>
+      </Form>
 
       {/* {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>} */}
       <p>Don't have an account?</p>
-      <a href="/register">Register</a>
+      {/* Prefetch will get the page content */}
+      <Link to="/register" prefetch="intent">Register</Link>
     </div>
   );
 };
