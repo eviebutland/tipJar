@@ -2,8 +2,8 @@ import type { User } from "@prisma/client";
 import { number, string, object } from "yup";
 
 export interface Login {
-  email: string;
-  password: string;
+  email: FormDataEntryValue;
+  password: FormDataEntryValue;
 }
 
 export function validateLogin(formData: Login) {

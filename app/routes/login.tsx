@@ -14,7 +14,10 @@ export const action = async ({ request }: ActionArgs) => {
     password: form.get("password"),
   };
 
-  const isValid = validateLogin(formData);
+  let isValid: boolean = false;
+  if (formData.email && formData.password) {
+    isValid = validateLogin(formData);
+  }
 
   if (isValid?.errors?.length) {
     return badRequest({
@@ -34,9 +37,8 @@ export const action = async ({ request }: ActionArgs) => {
 
 const Login = () => {
   const data = useActionData();
-  console.log(data);
+
   function handleSubmit() {
-    console.log("redirect to account");
     redirect("/account");
   }
 
