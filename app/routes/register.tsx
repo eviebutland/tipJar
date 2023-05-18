@@ -3,13 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 
-import { Form } from "@remix-run/react";
+import { Form, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
-import { badRequest } from "~/utils/request.server";
+
 import type { Prisma } from "@prisma/client";
 import { validateUserForm } from "~/utils/formValidation";
-import { ErrorBoundary } from "~/errorBoundary";
+
 import { createUser } from "~/utils/register.server";
+
+export const ErrorBoundary = () => {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error) && error.status === 400) {
+    return (
+      <div>
+        Please check the form fields
+        <p>{error.error}</p>
+      </div>
+    );
+  }
+};
+
 // By exporting the action - we do not need to have a submit function linked to the form. It is all handled here
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
@@ -28,14 +41,13 @@ export const action = async ({ request }: ActionArgs) => {
   const isValid = validateUserForm(formData);
 
   if (isValid?.errors?.length) {
-    return badRequest({
-      fieldErrors: isValid.errors,
-      fields: isValid,
-      formError: isValid.message,
-    });
+    throw new Response("Form is not valid", { status: 400 });
   } else {
     const newUser = createUser(formData);
 
+    if (!newUser) {
+      throw new Error("Unable to create user");
+    }
     return redirect(`/tip/${newUser.id}`);
   }
 };
@@ -142,9 +154,6 @@ const Register = () => {
             />
           </label>
         </section>
-        {actionData?.formError && (
-          <ErrorBoundary error={actionData}></ErrorBoundary>
-        )}
 
         <button type="submit" className="priority">
           Register

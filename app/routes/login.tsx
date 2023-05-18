@@ -1,10 +1,39 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import { Response } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { useActionData } from "@remix-run/react";
-import { ErrorBoundary } from "~/errorBoundary";
+import {
+  useActionData,
+  isRouteErrorResponse,
+  useRouteError,
+  Meta
+} from "@remix-run/react";
+// import { ErrorBoundary } from "~/errorBoundary";
 import { validateLogin } from "~/utils/formValidation";
 import { login } from "~/utils/login.server";
-import { badRequest } from "~/utils/request.server";
+// import { badRequest } from "~/utils/request.server";
+
+export const meta : V2_MetaFunction= () => {
+return [
+  description: 'This is the login page',
+  title: "Login"
+]
+}
+// isRouteErrorResponse can be used to gracefully handle expected user errors
+// such as 401, 403, 404
+export const ErrorBoundary = () => {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <p>This error was anexpected user error</p>
+        <a href="/login">Go to login</a>
+        <p>or</p>
+        <a href="/register">Register for an account</a>
+      </div>
+    );
+  }
+  return <div>There was an error </div>;
+};
 
 export const action = async ({ request }: ActionArgs) => {
   const form = await request.formData();
@@ -20,18 +49,19 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   if (isValid?.errors?.length) {
-    return badRequest({
-      fieldErrors: isValid.errors,
-      fields: isValid,
-      formError: isValid.message,
-    });
+    throw new Error("Testing Error Boundary");
+    // return badRequest({
+    //   fieldErrors: isValid.errors,
+    //   fields: isValid,
+    //   formError: isValid.message,
+    // });
   } else {
-    try {
-      const user = login(formData);
-      return redirect(`/tip/${user.id}`);
-    } catch (error) {
-      console.log(error);
+    const user = login(formData);
+
+    if (!user) {
+      throw new Response("No user found", { status: 404 });
     }
+    return redirect(`/tip/${user.id}`);
   }
 };
 
@@ -44,6 +74,7 @@ const Login = () => {
 
   return (
     <div>
+      <Meta></Meta>
       <form onSubmit={handleSubmit} method="post">
         <label>
           Email: <input type="text" name="email" />
@@ -55,7 +86,7 @@ const Login = () => {
         <button type="submit">Login</button>
       </form>
 
-      {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>}
+      {/* {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>} */}
       <p>Don't have an account?</p>
       <a href="/register">Register</a>
     </div>

@@ -1,25 +1,41 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Response } from "@remix-run/node";
+import {
+  useLoaderData,
+  useRouteError,
+  isRouteErrorResponse,
+} from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
-export const loader = async ({ params }: LoaderArgs) => {
-  try {
-    const user = await db.user.findUnique({
-      where: { id: params.userId },
-      select: {
-        name: true,
-        bio: true,
-        profilePicture: true,
-        email: true,
-        role: true,
-      },
-    });
-
-    return user;
-  } catch (error) {
-    console.log(error);
-    return false;
+export const ErrorBoundary = () => {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return (
+      <div>
+        <p>Use doesn't not exist</p>
+        <p>{error?.error}</p>
+      </div>
+    );
   }
+  return <div>There was an error </div>;
+};
+
+export const loader = async ({ params }: LoaderArgs) => {
+  const user = await db.user.findUnique({
+    where: { id: params.userId },
+    select: {
+      name: true,
+      bio: true,
+      profilePicture: true,
+      email: true,
+      role: true,
+    },
+  });
+
+  if (!user) {
+    throw new Response("No user was found", { status: 404 });
+  }
+  return user;
 };
 
 const TipsUser = () => {
