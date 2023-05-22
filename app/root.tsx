@@ -13,12 +13,14 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
-export const meta:V2_MetaFunction = () => {
+export const meta: V2_MetaFunction = () => {
   return [
-    description: 'This is a website to give tips',
-    title: 'Remix Tip Jar app'
-  ]
-}
+    {
+      description: "This is a website to give tips",
+      title: "Remix Tip Jar app",
+    },
+  ];
+};
 export default function App() {
   return (
     <html lang="en">
@@ -34,7 +36,7 @@ export default function App() {
         {/* Outlet is used on parent components to position the child  */}
         <Outlet />
         <ScrollRestoration />
-        <Scripts />
+        {/* <Scripts /> */}
 
         {/* Live reload is a component used in development */}
         <LiveReload />

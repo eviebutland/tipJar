@@ -32,7 +32,7 @@ const Account = () => {
 
   return (
     <div className="centered-container">
-      <Menu></Menu>
+      <Menu tipUser={data?.id}></Menu>
       <Form onSubmit={handleSubmit}>
         <h1 className="mt-2">Account details</h1>
 
@@ -75,13 +75,13 @@ const Account = () => {
 
           <label>
             Sort code:
-            <input value={data?.payment.sortCode}></input>
+            <input value={data?.sortCode}></input>
           </label>
         </div>
         <button type="submit">Save changes</button>
       </Form>
       {/* By having scripts in this page, it means the Form component can use Javascript Fetch, instead of requiring a full page reload */}
-      <Scripts />
+      {/* <Scripts /> */}
     </div>
   );
 };

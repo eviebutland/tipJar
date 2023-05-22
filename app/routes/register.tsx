@@ -165,7 +165,7 @@ const Register = () => {
         </button>
       </Form>
       {/* Before this, the website did not use any javascript */}
-      <Scripts />
+      {/* <Scripts /> */}
     </div>
   );
 };

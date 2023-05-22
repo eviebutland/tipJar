@@ -6,20 +6,23 @@ import {
   isRouteErrorResponse,
   useRouteError,
   Meta,
-  Scripts, Form,
-  Link
+  Scripts,
+  Form,
+  Link,
 } from "@remix-run/react";
 // import { ErrorBoundary } from "~/errorBoundary";
 import { validateLogin } from "~/utils/formValidation";
 import { login } from "~/utils/login.server";
 // import { badRequest } from "~/utils/request.server";
 
-export const meta : V2_MetaFunction= () => {
-return [
-  description: 'This is the login page',
-  title: "Login"
-]
-}
+export const meta: V2_MetaFunction = () => {
+  return [
+    {
+      description: "This is the login page",
+      title: "Login",
+    },
+  ];
+};
 // isRouteErrorResponse can be used to gracefully handle expected user errors
 // such as 401, 403, 404
 export const ErrorBoundary = () => {
@@ -27,7 +30,9 @@ export const ErrorBoundary = () => {
   if (isRouteErrorResponse(error)) {
     return (
       <div>
-        <p>This error was anexpected user error</p>
+        <p>This error was an expected user error</p>
+        <strong>{error.data}</strong>
+        <br />
         <a href="/login">Go to login</a>
         <p>or</p>
         <a href="/register">Register for an account</a>
@@ -51,24 +56,28 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   if (isValid?.errors?.length) {
-    throw new Error("Testing Error Boundary");
+    console.log("IS VALID", isValid);
+    // throw new Error("Testing Error Boundary");
+    throw new Response(isValid?.error[0], { status: 404 });
+
     // return badRequest({
     //   fieldErrors: isValid.errors,
     //   fields: isValid,
     //   formError: isValid.message,
     // });
   } else {
-    const user = login(formData);
+    const user = await login(formData);
 
+    console.log(user);
     if (!user) {
       throw new Response("No user found", { status: 404 });
     }
-    return redirect(`/tip/${user.id}`);
+    return redirect(`/account/${user?.id}`);
   }
 };
 
 const Login = () => {
-  const data = useActionData();
+  // const data = useActionData();
 
   function handleSubmit() {
     redirect("/account");
@@ -77,7 +86,7 @@ const Login = () => {
   return (
     <div>
       <Meta></Meta>
-      <Scripts />
+      {/* <Scripts /> */}
 
       <Form onSubmit={handleSubmit} method="post">
         <label>
@@ -93,7 +102,9 @@ const Login = () => {
       {/* {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>} */}
       <p>Don't have an account?</p>
       {/* Prefetch will get the page content */}
-      <Link to="/register" prefetch="intent">Register</Link>
+      <Link to="/register" prefetch="intent">
+        Register
+      </Link>
     </div>
   );
 };
