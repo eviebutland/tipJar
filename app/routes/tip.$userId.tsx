@@ -12,7 +12,7 @@ export const ErrorBoundary = () => {
   if (isRouteErrorResponse(error) && error.status === 404) {
     return (
       <div>
-        <p>Use doesn't not exist</p>
+        <p>User doesn't not exist</p>
         <p>{error?.error}</p>
       </div>
     );

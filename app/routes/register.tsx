@@ -2,13 +2,8 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ActionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-
-import {
-  Form,
-  Scripts,
-  isRouteErrorResponse,
-  useRouteError,
-} from "@remix-run/react";
+import { Scripts } from "@remix-run/react";
+import { Form, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { useActionData } from "@remix-run/react";
 
 import type { Prisma } from "@prisma/client";
@@ -66,6 +61,7 @@ const Register = () => {
 
   return (
     <div className="centered-container">
+      <Scripts></Scripts>
       <h1>Register</h1>
       <Form method="post" action="/register" className="w-1/2">
         <label>
@@ -100,10 +96,13 @@ const Register = () => {
               aria-invalid={actionData?.fields.path === "password"}
             />
 
-            <FontAwesomeIcon
-              icon={faEye}
+            <button
+              className="plain w-6 h-6"
               onClick={handleViewPassword}
-            ></FontAwesomeIcon>
+              type="button"
+            >
+              <FontAwesomeIcon size="sm" icon={faEye}></FontAwesomeIcon>
+            </button>
           </div>
         </label>
 
