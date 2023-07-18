@@ -11,13 +11,14 @@ import { validateUserForm } from "~/utils/formValidation";
 
 import { createUser } from "~/utils/register.server";
 
+
 export const ErrorBoundary = () => {
   const error = useRouteError();
   if (isRouteErrorResponse(error) && error.status === 400) {
     return (
       <div>
         Please check the form fields
-        <p>{error.error}</p>
+        <p>{error?.error}</p>
       </div>
     );
   }
@@ -61,6 +62,7 @@ const Register = () => {
 
   return (
     <div className="centered-container">
+      
       <Scripts></Scripts>
       <h1>Register</h1>
       <Form method="post" action="/register" className="w-1/2">
