@@ -10,6 +10,8 @@ import type { Prisma } from "@prisma/client";
 import { validateUserForm } from "~/utils/formValidation";
 
 import { createUser } from "~/utils/register.server";
+import { Menu } from '~/components/Menu';
+import { Layout } from '~/components/Layout';
 
 
 export const ErrorBoundary = () => {
@@ -61,9 +63,9 @@ const Register = () => {
   const actionData = useActionData<typeof action>();
 
   return (
+    <Layout withJs={true}>
     <div className="centered-container">
-      
-      <Scripts></Scripts>
+
       <h1>Register</h1>
       <Form method="post" action="/register" className="w-1/2">
         <label>
@@ -168,6 +170,7 @@ const Register = () => {
       {/* Before this, the website did not use any javascript */}
       {/* <Scripts /> */}
     </div>
+    </Layout>
   );
 };
 

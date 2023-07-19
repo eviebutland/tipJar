@@ -43,7 +43,7 @@ const TipsUser = () => {
 
   return (
     <div className="max-w-1/2">
-      {user?.profilePicure && <div>image here</div>}
+      {user?.profilePicture && <div>image here</div>}
 
       <div className="bg-blue-500 rounded-sm">
         <p className="text-white font-bold text-lg">{user?.name}</p>

@@ -3,6 +3,7 @@ import { useRouteError, isRouteErrorResponse } from "@remix-run/react";
 export function ErrorBoundary() {
   const error = useRouteError();
 
+
   // when true, this is what used to go to `CatchBoundary`
   if (isRouteErrorResponse(error)) {
     return (

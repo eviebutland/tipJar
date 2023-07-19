@@ -18,7 +18,7 @@ export const Menu = (props: Props) => {
             <FontAwesomeIcon icon={faBars} size='xl'></FontAwesomeIcon>
           </button>
         </div>
-        : <div className='absolute w-full h-full bg-white top-0 bottom-0'>
+        : <div className='fixed w-full h-full bg-white top-0 bottom-0 z-100'>
           <div className='flex justify-end'>
             <button className='border-transparent' onClick={() => setDisplayMenu(false)}>
               <FontAwesomeIcon icon={faBars} size='xl'></FontAwesomeIcon>

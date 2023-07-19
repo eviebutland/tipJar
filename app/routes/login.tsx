@@ -2,14 +2,13 @@ import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
 import { Response, redirect } from "@remix-run/node";
 
 import {
-  useActionData,
   isRouteErrorResponse,
   useRouteError,
   Meta,
-  Scripts,
   Form,
   Link,
 } from "@remix-run/react";
+import { Layout } from '~/components/Layout';
 // import { ErrorBoundary } from "~/errorBoundary";
 import { validateLogin } from "~/utils/formValidation";
 import { login } from "~/utils/login.server";
@@ -84,28 +83,29 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <Meta></Meta>
-      {/* <Scripts /> */}
+    <Layout withJs={true}>
+      <div className='centered-container'>
+        <Meta></Meta>
 
-      <Form onSubmit={handleSubmit} method="post">
-        <label>
-          Email: <input type="text" name="email" />
-        </label>
+        <Form onSubmit={handleSubmit} method="post">
+          <label>
+            Email: <input type="text" name="email" />
+          </label>
 
-        <label>
-          Password: <input type="password" name="password" />
-        </label>
-        <button type="submit">Login</button>
-      </Form>
+          <label>
+            Password: <input type="password" name="password" />
+          </label>
+          <button type="submit">Login</button>
+        </Form>
 
-      {/* {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>} */}
-      <p>Don't have an account?</p>
-      {/* Prefetch will get the page content */}
-      <Link to="/register" prefetch="intent">
-        Register
-      </Link>
-    </div>
+        {/* {data?.formError && <ErrorBoundary error={data}></ErrorBoundary>} */}
+        <p>Don't have an account?</p>
+        {/* Prefetch will get the page content */}
+        <Link to="/register" prefetch="intent">
+          Register
+        </Link>
+      </div>
+    </Layout>
   );
 };
 

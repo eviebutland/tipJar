@@ -1,22 +1,18 @@
-import { Scripts, useLoaderData, Form } from "@remix-run/react";
-import { Menu } from "~/components/Menu";
-import { db } from "~/utils/db.server";
+import {  Form, useOutletContext } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
 
-export const loader = async () => {
-  try {
-    return await db.user.findUnique({
-      // update to use current user details
-      where: { email: "evie.butland@gmail.com" },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+interface Props {
+  data: unknown
+}
 
-const Account = () => {
-  const data = useLoaderData<typeof loader>();
-  console.log(data);
+function handleRedirect () {
+  redirect('/login')
+  console.log('go somewhere else')
+}
+const Account = (props: Props) => {
+  const [data, _] = useOutletContext();
 
+  console.log('data', data)
   const handleSubmit = async () => {
     try {
       return await db.user.update({
@@ -29,11 +25,11 @@ const Account = () => {
       console.log("error updating user", error);
     }
   };
+  
 
   return (
     <div className="centered-container">
-      <Menu tipUser={data?.id}></Menu>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} onChange={handleRedirect}>
         <h1 className="mt-2">Account details</h1>
 
         <div>
@@ -43,45 +39,43 @@ const Account = () => {
           </label>
 
           <label>
-            Email: <input value={data?.email}></input>
+            Email: <input value={props.data?.email}></input>
           </label>
 
           <label>
             Password:
-            <input value={data?.password}></input>
+            <input value={props.data?.password}></input>
           </label>
 
           <label>
             Bio:
-            <textarea value={data?.bio}></textarea>
+            <textarea value={props.data?.bio}></textarea>
           </label>
 
           <label>
             Role:
-            <input value={data?.role}></input>
+            <input value={props.data?.role}></input>
           </label>
 
           <label>
             Profile picture:
-            <input value={data?.profilePicture}></input>
+            <input value={props.data?.profilePicture}></input>
           </label>
         </div>
         <h2>Payment information</h2>
         <div className="flex space-x-4">
           <label>
             Card Number:
-            <input value={data?.cardNo}></input>
+            <input value={props.data?.cardNo}></input>
           </label>
 
           <label>
             Sort code:
-            <input value={data?.sortCode}></input>
+            <input value={props.data?.sortCode}></input>
           </label>
         </div>
         <button type="submit">Save changes</button>
       </Form>
-      {/* By having scripts in this page, it means the Form component can use Javascript Fetch, instead of requiring a full page reload */}
-      {/* <Scripts /> */}
     </div>
   );
 };
